@@ -2,6 +2,9 @@
 // You should copy it to another filename to avoid overwriting it.
 
 #include "BenchService.h"
+#include <thrift/concurrency/ThreadManager.h>
+#include <thrift/concurrency/PosixThreadFactory.h>
+
 #include <thrift/protocol/TBinaryProtocol.h>
 #include <thrift/server/TSimpleServer.h>
 #include <thrift/transport/TServerSocket.h>
@@ -11,6 +14,7 @@ using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
 using namespace ::apache::thrift::server;
+using namespace ::apache::thrift::concurrency;
 
 using boost::shared_ptr;
 
@@ -39,6 +43,12 @@ int main(int argc, char **argv) {
   shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
 
   printf("Starting server\n");
+  int workerCount = 10;
+  shared_ptr<ThreadManager> threadManager =  ThreadManager::newSimpleThreadManager(workerCount);
+  shared_ptr<ThreadFactory> threadFactory(new PosixThreadFactory());
+  threadManager->threadFactory(threadFactory);
+  threadManager->start();
+
   TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
   server.serve();
   return 0;
