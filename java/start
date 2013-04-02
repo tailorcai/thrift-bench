@@ -1,0 +1,16 @@
+#!/usr/bin/python
+import sys,os
+
+jars = []
+for dir in (".","./lib"):
+  jars.append(  ":".join( [ dir+"/"+f for f in filter( lambda x: x.endswith( ".jar"), os.listdir(dir))]))
+
+cfg = dict(
+  cp = ":".join( jars ),
+  main="com.ganji.arch.bench.Main",
+  param="",
+  opt = "", #-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9995 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Xmx512m -Xms256m"
+)
+cmd =  "java %(opt)s -cp %(cp)s %(main)s %(param)s" % cfg
+print cmd
+os.system(cmd)
