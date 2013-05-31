@@ -21,7 +21,7 @@ from ttypes import *
 
 from threading import Thread
 
-HOST = "127.0.0.1"
+HOST = sys.argv[1] #"127.0.0.1"
 PORT = 54343
 REPEAT = 1000
 CONCURRENCY = 10

@@ -6,7 +6,7 @@
 #include <thrift/concurrency/PosixThreadFactory.h>
 
 #include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/server/TSimpleServer.h>
+#include <thrift/server/TNonblockingServer.h>
 #include <thrift/transport/TServerSocket.h>
 #include <thrift/transport/TBufferTransports.h>
 
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
   threadManager->threadFactory(threadFactory);
   threadManager->start();
 
-  TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
+  TNonblockingServer server(processor, serverTransport, transportFactory, protocolFactory);
   server.serve();
   return 0;
 }
